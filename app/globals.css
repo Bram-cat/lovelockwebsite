@@ -1,0 +1,415 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 342 83% 48%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 342 83% 48%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 342 83% 48%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 342 83% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    position: relative;
+  }
+}
+
+/* Cosmic background animations */
+.cosmic-bg {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+  position: relative;
+  min-height: 100vh;
+}
+
+.cosmic-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 25% 25%, #ec4899 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, #667eea 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, #764ba2 0%, transparent 50%);
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+/* Sparkle animation */
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ffd700;
+  border-radius: 50%;
+  animation: sparkle 2s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.7);
+}
+
+/* Hero section styles */
+.hero-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ec4899 100%);
+}
+
+/* Button hover effects */
+.btn-cosmic {
+  @apply relative overflow-hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-cosmic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-cosmic:hover::before {
+  left: 100%;
+}
+
+/* Card glow effects */
+.card-glow {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+}
+
+/* Text glow */
+.text-glow {
+  text-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+}
+
+/* Loading spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(236, 72, 153, 0.3);
+  border-top: 4px solid #ec4899;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pricing card animations */
+.pricing-card {
+  transform: scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pricing-card:hover {
+  transform: scale(1.05) translateY(-8px);
+}
+
+/* Feature list animations */
+.feature-item {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.6s ease forwards;
+}
+
+.feature-item:nth-child(1) { animation-delay: 0.1s; }
+.feature-item:nth-child(2) { animation-delay: 0.2s; }
+.feature-item:nth-child(3) { animation-delay: 0.3s; }
+.feature-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 3D Flip Card Styles */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.flip-card-container {
+  perspective: 1000px;
+}
+
+/* Clerk UserProfile Custom Styles */
+.clerk-profile-container {
+  /* Override Clerk's default styles for better cosmic theme integration */
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.clerk-profile-container .cl-rootBox {
+  background: transparent !important;
+  box-shadow: none !important;
+  width: 100% !important;
+}
+
+.clerk-profile-container .cl-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  width: 100% !important;
+}
+
+.clerk-profile-container .cl-headerTitle {
+  color: #ffffff !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+}
+
+.clerk-profile-container .cl-headerSubtitle {
+  color: #d1d5db !important;
+  font-size: 0.95rem !important;
+}
+
+.clerk-profile-container .cl-formButtonPrimary {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+  border: none !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.3s ease !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1.5rem !important;
+}
+
+.clerk-profile-container .cl-formButtonPrimary:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4) !important;
+}
+
+.clerk-profile-container .cl-formFieldInput {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.95rem !important;
+}
+
+.clerk-profile-container .cl-formFieldInput:focus {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.clerk-profile-container .cl-formFieldLabel {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.clerk-profile-container .cl-dividerLine {
+  background: rgba(255, 255, 255, 0.15) !important;
+  height: 1px !important;
+}
+
+.clerk-profile-container .cl-navbarButton {
+  color: #d1d5db !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
+  margin: 0.25rem !important;
+}
+
+.clerk-profile-container .cl-navbarButton:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.clerk-profile-container .cl-navbarButtonActive {
+  color: #8b5cf6 !important;
+  background: rgba(139, 92, 246, 0.2) !important;
+}
+
+.clerk-profile-container .cl-menuButton {
+  color: #d1d5db !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem !important;
+}
+
+.clerk-profile-container .cl-menuButton:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.clerk-profile-container .cl-profileSectionTitle {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+}
+
+.clerk-profile-container .cl-profileSectionContent {
+  color: #d1d5db !important;
+}
+
+.clerk-profile-container .cl-badge {
+  background: rgba(139, 92, 246, 0.25) !important;
+  color: #8b5cf6 !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.25rem 0.75rem !important;
+}
+
+.clerk-profile-container .cl-alert {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  border-radius: 0.75rem !important;
+  padding: 1rem !important;
+}
+
+.clerk-profile-container .cl-profileSection {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 1rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  margin: 1rem 0 !important;
+  padding: 1.5rem !important;
+}
+
+.clerk-profile-container .cl-profileSectionItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 1rem 0 !important;
+}
+
+.clerk-profile-container .cl-profileSectionItem:last-child {
+  border-bottom: none !important;
+}
+
+.clerk-profile-container .cl-formButtonSecondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0.75rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.clerk-profile-container .cl-formButtonSecondary:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.clerk-profile-container .cl-accordionTriggerButton {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+}
+
+.clerk-profile-container .cl-accordionTriggerButton:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.clerk-profile-container .cl-breadcrumbs {
+  color: #d1d5db !important;
+}
+
+.clerk-profile-container .cl-breadcrumbsItem {
+  color: #d1d5db !important;
+}
+
+.clerk-profile-container .cl-breadcrumbsItemDivider {
+  color: #9ca3af !important;
+}
+
+.clerk-profile-container .cl-userPreviewMainIdentifier {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.clerk-profile-container .cl-userPreviewSecondaryIdentifier {
+  color: #d1d5db !important;
+}
