@@ -112,15 +112,12 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => router.push("/")}
+            className="cursor-pointer"
+            onClick={() => window.location.href = 'https://lovelock.it.com/account'}
           >
             <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
               <Heart className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-white text-glow">
-              Lovelock
-            </span>
           </motion.div>
 
           <div className="flex items-center space-x-4">
@@ -132,6 +129,8 @@ export default function DashboardPage() {
               Account
             </a>
             <UserButton
+              showName={false}
+              afterSignOutUrl="/"
               appearance={{
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-purple-400/50 hover:ring-purple-400 transition-all duration-300",
