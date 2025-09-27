@@ -131,6 +131,8 @@ export default function DashboardPage() {
             <UserButton
               showName={false}
               afterSignOutUrl="/"
+              userProfileMode="navigation"
+              userProfileUrl={null}
               appearance={{
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-purple-400/50 hover:ring-purple-400 transition-all duration-300",
@@ -138,7 +140,9 @@ export default function DashboardPage() {
                   userButtonPopoverText: "text-white",
                   userButtonPopoverActionButton: "text-gray-300 hover:text-white",
                   userButtonPopoverFooter: "border-white/10",
-                  userButtonPopoverActionButton__manageAccount: "display: none !important"
+                  userButtonPopoverActionButton__manageAccount: "display: none !important",
+                  userButtonPopoverActionButtonIcon__manageAccount: "display: none !important",
+                  userButtonPopoverActionButtonText__manageAccount: "display: none !important"
                 }
               }}
             />
