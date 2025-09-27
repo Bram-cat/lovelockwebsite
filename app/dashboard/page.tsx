@@ -137,7 +137,8 @@ export default function DashboardPage() {
                   userButtonPopoverCard: "glass border-white/10 bg-white/10 backdrop-blur-lg",
                   userButtonPopoverText: "text-white",
                   userButtonPopoverActionButton: "text-gray-300 hover:text-white",
-                  userButtonPopoverFooter: "border-white/10"
+                  userButtonPopoverFooter: "border-white/10",
+                  userButtonPopoverActionButton__manageAccount: "display: none !important"
                 }
               }}
             />
