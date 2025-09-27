@@ -5,7 +5,7 @@ import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Crown, Calendar, CreditCard, ArrowUpCircle, ArrowDownCircle, XCircle, RotateCcw } from 'lucide-react'
+import { Crown, Calendar, CreditCard, ArrowUpCircle, ArrowDownCircle, XCircle, RotateCcw, RefreshCw } from 'lucide-react'
 
 interface SubscriptionManagementData {
   hasSubscription: boolean
@@ -164,6 +164,40 @@ export function SubscriptionManagement() {
     } catch (err) {
       console.error('Subscription action error:', err)
       alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  // Handle subscription sync
+  const handleSyncSubscription = async () => {
+    try {
+      setActionLoading('sync')
+
+      const response = await fetch('/api/subscription/sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to sync subscription')
+      }
+
+      const result = await response.json()
+      console.log('Subscription sync result:', result)
+
+      // Refresh data after successful sync
+      await fetchManagementData()
+
+      // Show success message
+      alert(result.message || 'Subscription synced successfully')
+
+    } catch (err) {
+      console.error('Error syncing subscription:', err)
+      alert(`Error: ${err instanceof Error ? err.message : 'Failed to sync subscription'}`)
     } finally {
       setActionLoading(null)
     }
@@ -347,17 +381,28 @@ export function SubscriptionManagement() {
               )}
             </div>
 
-            {managementData.hasSubscription && (
+            <div className="flex gap-2">
               <Button
-                onClick={handleBillingPortal}
-                disabled={actionLoading === 'billing_portal'}
+                onClick={handleSyncSubscription}
+                disabled={actionLoading === 'sync'}
                 variant="outline"
                 size="sm"
               >
-                <CreditCard className="h-4 w-4 mr-2" />
-                {actionLoading === 'billing_portal' ? 'Loading...' : 'Billing Portal'}
+                <RefreshCw className="h-4 w-4 mr-2" />
+                {actionLoading === 'sync' ? 'Syncing...' : 'Refresh'}
               </Button>
-            )}
+              {managementData.hasSubscription && (
+                <Button
+                  onClick={handleBillingPortal}
+                  disabled={actionLoading === 'billing_portal'}
+                  variant="outline"
+                  size="sm"
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  {actionLoading === 'billing_portal' ? 'Loading...' : 'Billing Portal'}
+                </Button>
+              )}
+            </div>
           </div>
 
           {managementData.subscription?.currentPeriodEnd && (

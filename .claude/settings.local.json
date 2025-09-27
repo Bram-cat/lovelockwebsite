@@ -19,7 +19,8 @@
       "Bash(npx tsc:*)",
       "Bash(taskkill:*)",
       "Read(//c/Users/**)",
-      "WebFetch(domain:lovelock.it.com)"
+      "WebFetch(domain:lovelock.it.com)",
+      "Bash(git remote set-url:*)"
     ],
     "deny": [],
     "ask": []
