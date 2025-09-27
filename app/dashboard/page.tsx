@@ -131,16 +131,14 @@ export default function DashboardPage() {
             <UserButton
               showName={false}
               afterSignOutUrl="/"
+              userProfileUrl="https://lovelock.it.com/account"
               appearance={{
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-purple-400/50 hover:ring-purple-400 transition-all duration-300",
                   userButtonPopoverCard: "glass border-white/10 bg-white/10 backdrop-blur-lg",
                   userButtonPopoverText: "text-white",
                   userButtonPopoverActionButton: "text-gray-300 hover:text-white",
-                  userButtonPopoverFooter: "border-white/10",
-                  userButtonPopoverActionButton__manageAccount: "display: none !important",
-                  userButtonPopoverActionButtonIcon__manageAccount: "display: none !important",
-                  userButtonPopoverActionButtonText__manageAccount: "display: none !important"
+                  userButtonPopoverFooter: "border-white/10"
                 }
               }}
             />
