@@ -132,7 +132,6 @@ export default function DashboardPage() {
               showName={false}
               afterSignOutUrl="/"
               userProfileMode="navigation"
-              userProfileUrl={null}
               appearance={{
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-purple-400/50 hover:ring-purple-400 transition-all duration-300",
