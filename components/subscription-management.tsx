@@ -388,8 +388,7 @@ export function SubscriptionManagement() {
                 variant="outline"
                 size="sm"
               >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                {actionLoading === 'sync' ? 'Syncing...' : 'Refresh'}
+                <RefreshCw className={`h-4 w-4 ${actionLoading === 'sync' ? 'animate-spin' : ''}`} />
               </Button>
               {managementData.hasSubscription && (
                 <Button
