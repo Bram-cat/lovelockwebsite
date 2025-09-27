@@ -5,7 +5,7 @@ import { ProfileSubscriptionService } from '@/lib/profile-subscription'
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = auth()
+    const { userId } = await auth()
 
     if (!userId) {
       return NextResponse.json(
@@ -16,38 +16,26 @@ export async function POST(request: NextRequest) {
 
     console.log(`Manual subscription sync requested for user: ${userId}`)
 
-    // Get customer information
-    const customerResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/get-customer`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': request.headers.get('Authorization') || '',
-        'Cookie': request.headers.get('Cookie') || ''
-      },
-    })
+    // Get customer information directly (avoid internal HTTP call)
+    const userSubscription = await ProfileSubscriptionService.getUserSubscription(userId)
 
-    if (!customerResponse.ok) {
-      throw new Error('Failed to fetch customer information')
-    }
-
-    const customer = await customerResponse.json()
-    console.log('Customer data:', customer)
-
-    if (!customer.id || customer.id.startsWith('mock_') || customer.id.startsWith('fallback_')) {
+    if (!userSubscription?.stripe_customer_id) {
       return NextResponse.json(
         { error: 'No valid Stripe customer found' },
         { status: 404 }
       )
     }
 
+    const customerId = userSubscription.stripe_customer_id
+
     // Get all subscriptions for this customer from Stripe
     const subscriptions = await stripe.subscriptions.list({
-      customer: customer.id,
+      customer: customerId,
       status: 'all',
       limit: 10
     })
 
-    console.log(`Found ${subscriptions.data.length} subscriptions for customer ${customer.id}`)
+    console.log(`Found ${subscriptions.data.length} subscriptions for customer ${customerId}`)
 
     // Find the most recent active subscription
     let latestSubscription = null
