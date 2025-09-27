@@ -20,7 +20,8 @@
       "Bash(taskkill:*)",
       "Read(//c/Users/**)",
       "WebFetch(domain:lovelock.it.com)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
