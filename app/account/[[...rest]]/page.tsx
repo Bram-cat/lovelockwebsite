@@ -100,6 +100,9 @@ function AccountPageContent() {
               ← Back to Dashboard
             </a>
             <UserButton
+              showName={false}
+              afterSignOutUrl="/"
+              userProfileUrl="https://lovelock.it.com/account"
               appearance={{
                 elements: {
                   avatarBox: "w-10 h-10 ring-2 ring-purple-400/50 hover:ring-purple-400 transition-all duration-300",
@@ -173,10 +176,24 @@ function AccountPageContent() {
                     elements: {
                       // Hide billing-related elements since we handle billing via Stripe
                       navbarButton__billing: {
-                        display: 'none'
+                        display: 'none !important'
                       },
                       navbarMobileMenuButton__billing: {
-                        display: 'none'
+                        display: 'none !important'
+                      },
+                      // Additional billing element selectors to ensure complete hiding
+                      profileSection__billing: {
+                        display: 'none !important'
+                      },
+                      profilePage__billing: {
+                        display: 'none !important'
+                      },
+                      navbar__billing: {
+                        display: 'none !important'
+                      },
+                      // Hide any element with billing in the class name
+                      '[data-testid*="billing"]': {
+                        display: 'none !important'
                       }
                     }
                   }}
