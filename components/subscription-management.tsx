@@ -404,6 +404,14 @@ export function SubscriptionManagement() {
             </div>
           </div>
 
+          {/* Payment Processing Notice */}
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-blue-800 text-sm">
+              ℹ️ After making a payment, please allow 2-3 minutes for changes to appear in the website and app.
+              You can use the refresh button above to sync your subscription status.
+            </p>
+          </div>
+
           {managementData.subscription?.currentPeriodEnd && (
             <div className="text-sm text-gray-600">
               <Calendar className="h-4 w-4 inline mr-1" />

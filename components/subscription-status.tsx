@@ -412,6 +412,50 @@ export function SubscriptionStatus() {
         </div>
       </div>
 
+      {/* Usage Reset for Plan Changes */}
+      {subscriptionData.subscription.tier !== 'free' && (
+        <div className="glass p-6 rounded-3xl border-yellow-300">
+          <h4 className="text-lg font-semibold text-white mb-3">Just Upgraded?</h4>
+          <p className="text-sm text-gray-300 mb-4">
+            If you just upgraded your plan and your usage shows old limits, you can reset your usage statistics.
+            This will set all your usage back to 0 for the current month.
+          </p>
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/subscription/reset-usage', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' }
+                })
+
+                if (response.ok) {
+                  alert('Usage reset successfully!')
+                  await fetchSubscriptionStatus()
+                } else {
+                  throw new Error('Failed to reset usage')
+                }
+              } catch (error) {
+                alert('Error resetting usage. Please try again.')
+              }
+            }}
+            variant="outline"
+            size="sm"
+            className="text-blue-600 border-blue-300 hover:bg-blue-50"
+          >
+            Reset My Usage
+          </Button>
+        </div>
+      )}
+
+      {/* Payment Processing Notice */}
+      <div className="glass p-6 rounded-3xl border-blue-300">
+        <h4 className="text-lg font-semibold text-white mb-3">💳 Payment Processing</h4>
+        <p className="text-sm text-gray-300">
+          After making a payment, please allow <strong>2-3 minutes</strong> for changes to appear in the website and app.
+          You can use the refresh button above to sync your subscription status, or refresh this page.
+        </p>
+      </div>
+
       {/* Test Mode Actions */}
       {process.env.NODE_ENV === 'development' && (
         <div className="glass p-8 rounded-3xl border-dashed border-blue-300">
