@@ -194,6 +194,26 @@ function AccountPageContent() {
                       // Hide any element with billing in the class name
                       '[data-testid*="billing"]': {
                         display: 'none !important'
+                      },
+                      // Hide notifications-related elements
+                      navbarButton__notifications: {
+                        display: 'none !important'
+                      },
+                      navbarMobileMenuButton__notifications: {
+                        display: 'none !important'
+                      },
+                      profileSection__notifications: {
+                        display: 'none !important'
+                      },
+                      profilePage__notifications: {
+                        display: 'none !important'
+                      },
+                      navbar__notifications: {
+                        display: 'none !important'
+                      },
+                      // Hide any element with notifications in the class name
+                      '[data-testid*="notifications"]': {
+                        display: 'none !important'
                       }
                     }
                   }}
