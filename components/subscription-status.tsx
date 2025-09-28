@@ -292,6 +292,11 @@ export function SubscriptionStatus() {
     return 'bg-green-500'
   }
 
+  const getDisplayUsage = (used: number, limit: number) => {
+    if (limit === -1) return used // Unlimited - show actual usage
+    return Math.min(used, limit) // Cap at limit for limited plans
+  }
+
   return (
     <div className="space-y-4">
       {/* Subscription Overview */}
@@ -358,10 +363,11 @@ export function SubscriptionStatus() {
         <h3 className="text-2xl font-bold text-white mb-4">Usage Statistics</h3>
         <div className="space-y-4">
           {(['numerology', 'loveMatch', 'trustAssessment'] as const).map((feature) => {
-            const used = usage[feature] as number
+            const actualUsed = usage[feature] as number
             const limit = limits[feature] as number
-            const percentage = getUsagePercentage(used, limit)
-            const color = getUsageColor(used, limit)
+            const displayUsed = getDisplayUsage(actualUsed, limit)
+            const percentage = getUsagePercentage(actualUsed, limit)
+            const color = getUsageColor(actualUsed, limit)
 
             return (
               <div key={feature} className="space-y-2">
@@ -373,11 +379,11 @@ export function SubscriptionStatus() {
                   </span>
                   <span className={`text-sm font-medium ${
                     limit === -1 ? 'text-green-400' :
-                    percentage > 80 ? 'text-red-400' :
-                    percentage > 60 ? 'text-yellow-400' :
+                    percentage >= 100 ? 'text-red-400' :
+                    percentage > 80 ? 'text-yellow-400' :
                     'text-gray-300'
                   }`}>
-                    {used} / {limit === -1 ? '∞' : limit}
+                    {displayUsed} / {limit === -1 ? '∞' : limit}
                   </span>
                 </div>
                 <div className="w-full bg-gray-600 rounded-full h-3">
@@ -386,7 +392,12 @@ export function SubscriptionStatus() {
                     style={{ width: limit === -1 ? '100%' : `${percentage}%` }}
                   />
                 </div>
-                {limit !== -1 && percentage > 80 && (
+                {limit !== -1 && percentage >= 100 && (
+                  <div className="text-xs text-red-400">
+                    🚫 Monthly limit reached
+                  </div>
+                )}
+                {limit !== -1 && percentage >= 80 && percentage < 100 && (
                   <div className="text-xs text-yellow-400">
                     ⚠️ Getting close to your monthly limit
                   </div>

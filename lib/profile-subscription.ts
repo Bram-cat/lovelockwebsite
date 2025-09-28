@@ -361,6 +361,39 @@ export class ProfileSubscriptionService {
     }
   }
 
+  // Reset usage statistics for a user
+  static async resetUsageStats(clerkId: string): Promise<void> {
+    try {
+      console.log(`Resetting usage stats for user ${clerkId}`)
+
+      // Clear all usage records for this user from current month
+      const startOfMonth = new Date()
+      startOfMonth.setDate(1)
+      startOfMonth.setHours(0, 0, 0, 0)
+
+      const tables = ['numerology_readings', 'love_matches', 'trust_assessments']
+
+      for (const table of tables) {
+        const { error } = await supabaseAdmin
+          .from(table)
+          .delete()
+          .eq('user_id', clerkId)
+          .gte('created_at', startOfMonth.toISOString())
+
+        if (error) {
+          console.error(`Error clearing ${table} for user ${clerkId}:`, error)
+        } else {
+          console.log(`Cleared ${table} usage for user ${clerkId}`)
+        }
+      }
+
+      console.log(`✅ Successfully reset usage stats for user ${clerkId}`)
+    } catch (error) {
+      console.error('Error resetting usage stats:', error)
+      throw error
+    }
+  }
+
   // Create or update subscription when payment succeeds
   static async createSubscription(
     clerkId: string,
@@ -416,6 +449,10 @@ export class ProfileSubscriptionService {
         throw profileError
       }
 
+      // Get existing subscription to check if tier is changing
+      const existingSubscription = await this.getUserSubscription(clerkId)
+      const isTierChange = existingSubscription && existingSubscription.subscription_type !== tier
+
       // Cancel any existing active subscriptions first to prevent duplicates
       const { error: cancelError } = await supabaseAdmin
         .from('subscriptions')
@@ -428,6 +465,17 @@ export class ProfileSubscriptionService {
 
       if (cancelError) {
         console.warn('Error cancelling existing subscriptions:', cancelError)
+      }
+
+      // Reset usage stats if this is a tier change
+      if (isTierChange) {
+        console.log(`Tier change detected for user ${clerkId}: ${existingSubscription?.subscription_type} -> ${tier}`)
+        try {
+          await this.resetUsageStats(clerkId)
+        } catch (resetError) {
+          console.error('Error resetting usage stats:', resetError)
+          // Don't fail the subscription creation if usage reset fails
+        }
       }
 
       // Create new subscription record
@@ -647,15 +695,15 @@ export class ProfileSubscriptionService {
         return { canUse: true }
       }
 
-      // Check if under limit
-      if (currentUsage < limit) {
-        return { canUse: true }
+      // Check if at or over limit (enforce strict limit)
+      if (currentUsage >= limit) {
+        return {
+          canUse: false,
+          reason: `Usage limit reached (${Math.min(currentUsage, limit)}/${limit}). Upgrade to get more access.`
+        }
       }
 
-      return {
-        canUse: false,
-        reason: `Usage limit reached (${currentUsage}/${limit}). Upgrade to get more access.`
-      }
+      return { canUse: true }
     } catch (error) {
       console.error('Error checking feature usage:', error)
       return { canUse: false, reason: 'Error checking usage limits' }
