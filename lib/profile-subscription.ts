@@ -451,7 +451,7 @@ export class ProfileSubscriptionService {
 
       // Get existing subscription to check if tier is changing
       const existingSubscription = await this.getUserSubscription(clerkId)
-      const isTierChange = existingSubscription && existingSubscription.subscription_type !== tier
+      const isUpgrade = !existingSubscription || (existingSubscription && existingSubscription.subscription_type !== tier)
 
       // Cancel any existing active subscriptions first to prevent duplicates
       const { error: cancelError } = await supabaseAdmin
@@ -467,11 +467,13 @@ export class ProfileSubscriptionService {
         console.warn('Error cancelling existing subscriptions:', cancelError)
       }
 
-      // Reset usage stats if this is a tier change
-      if (isTierChange) {
-        console.log(`Tier change detected for user ${clerkId}: ${existingSubscription?.subscription_type} -> ${tier}`)
+      // Reset usage stats for ANY plan upgrade (including free to paid)
+      if (isUpgrade) {
+        const fromTier = existingSubscription?.subscription_type || 'free'
+        console.log(`Plan upgrade detected for user ${clerkId}: ${fromTier} -> ${tier}`)
         try {
           await this.resetUsageStats(clerkId)
+          console.log(`✅ Usage stats reset for plan upgrade: ${fromTier} -> ${tier}`)
         } catch (resetError) {
           console.error('Error resetting usage stats:', resetError)
           // Don't fail the subscription creation if usage reset fails

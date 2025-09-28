@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Crown, Calendar, CreditCard, ArrowUpCircle, ArrowDownCircle, XCircle, RotateCcw, RefreshCw } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
 
 interface SubscriptionManagementData {
   hasSubscription: boolean
@@ -31,6 +32,7 @@ interface PriceOption {
 
 export function SubscriptionManagement() {
   const { user, isLoaded } = useUser()
+  const { toast } = useToast()
   const [managementData, setManagementData] = useState<SubscriptionManagementData | null>(null)
   const [priceOptions, setPriceOptions] = useState<PriceOption[]>([])
   const [loading, setLoading] = useState(true)
@@ -159,11 +161,19 @@ export function SubscriptionManagement() {
       await fetchManagementData()
 
       // Show success message
-      alert(result.message || 'Action completed successfully')
+      toast({
+        title: "Success",
+        description: result.message || 'Action completed successfully',
+        variant: "success"
+      })
 
     } catch (err) {
       console.error('Subscription action error:', err)
-      alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      toast({
+        title: "Error",
+        description: err instanceof Error ? err.message : 'Unknown error',
+        variant: "destructive"
+      })
     } finally {
       setActionLoading(null)
     }
@@ -193,11 +203,19 @@ export function SubscriptionManagement() {
       await fetchManagementData()
 
       // Show success message
-      alert(result.message || 'Subscription synced successfully')
+      toast({
+        title: "Sync Complete",
+        description: result.message || 'Subscription synced successfully',
+        variant: "success"
+      })
 
     } catch (err) {
       console.error('Error syncing subscription:', err)
-      alert(`Error: ${err instanceof Error ? err.message : 'Failed to sync subscription'}`)
+      toast({
+        title: "Sync Failed",
+        description: err instanceof Error ? err.message : 'Failed to sync subscription',
+        variant: "destructive"
+      })
     } finally {
       setActionLoading(null)
     }
@@ -225,8 +243,14 @@ export function SubscriptionManagement() {
       // Check if user has a real Stripe customer ID
       if (!customer.id || customer.id.startsWith('mock_') || customer.id.startsWith('fallback_')) {
         // User doesn't have an active paid subscription, redirect to pricing
-        alert('Billing portal is only available for active paid subscriptions. Please upgrade to access billing management.')
-        window.location.href = '/pricing'
+        toast({
+          title: "Billing Portal Unavailable",
+          description: 'Billing portal is only available for active paid subscriptions. Redirecting to pricing page...',
+          variant: "default"
+        })
+        setTimeout(() => {
+          window.location.href = '/pricing'
+        }, 2000)
         return
       }
 
@@ -250,8 +274,14 @@ export function SubscriptionManagement() {
           errorData.error.includes('configuration') ||
           errorData.error.includes('not been created')
         )) {
-          alert('Billing portal is temporarily unavailable. Please use the pricing page to manage your subscription.')
-          window.location.href = '/pricing'
+          toast({
+            title: "Billing Portal Unavailable",
+            description: 'Billing portal is temporarily unavailable. Redirecting to pricing page...',
+            variant: "default"
+          })
+          setTimeout(() => {
+            window.location.href = '/pricing'
+          }, 2000)
           return
         }
 
@@ -265,7 +295,11 @@ export function SubscriptionManagement() {
 
     } catch (err) {
       console.error('Error opening billing portal:', err)
-      alert(`Error: ${err instanceof Error ? err.message : 'Failed to open billing portal'}`)
+      toast({
+        title: "Billing Portal Error",
+        description: err instanceof Error ? err.message : 'Failed to open billing portal',
+        variant: "destructive"
+      })
     } finally {
       setActionLoading(null)
     }
@@ -404,13 +438,6 @@ export function SubscriptionManagement() {
             </div>
           </div>
 
-          {/* Payment Processing Notice */}
-          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-800 text-sm">
-              ℹ️ After making a payment, please allow 2-3 minutes for changes to appear in the website and app.
-              You can use the refresh button above to sync your subscription status.
-            </p>
-          </div>
 
           {managementData.subscription?.currentPeriodEnd && (
             <div className="text-sm text-gray-600">
