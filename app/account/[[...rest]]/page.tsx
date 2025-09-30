@@ -2,7 +2,7 @@
 
 import { useUser, UserProfile, UserButton, useClerk } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
-import { User, Settings, Shield, Bell, CreditCard, Key, LogOut } from 'lucide-react'
+import { User, Settings, Shield, Bell, CreditCard, Key, LogOut, Trash2 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState, Suspense, useRef } from 'react'
@@ -14,6 +14,8 @@ function AccountPageContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [mobileAuth, setMobileAuth] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Extract URL parameters safely
   const userId = searchParams?.get('userId') || null
@@ -47,6 +49,31 @@ function AccountPageContent() {
       }
     }
   }, [isLoaded, user]) // Minimal dependencies
+
+  const handleDeleteAccount = async () => {
+    if (!user) return
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch('/api/account/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete account')
+      }
+
+      // Sign out and redirect to home page
+      await signOut(() => router.push('/'))
+    } catch (error) {
+      console.error('Error deleting account:', error)
+      alert('Failed to delete account. Please try again or contact support.')
+      setIsDeleting(false)
+    }
+  }
 
   if (!isLoaded) {
     return (
@@ -234,6 +261,76 @@ function AccountPageContent() {
                     <LogOut className="w-5 h-5 group-hover:text-red-400 transition-colors" />
                     <span className="font-medium">Log Out</span>
                   </button>
+                </motion.div>
+
+                {/* Delete Account Section */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="mt-8"
+                >
+                  <Card className="glass border-red-500/30 bg-red-500/5">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center space-x-2">
+                        <Trash2 className="w-5 h-5 text-red-400" />
+                        <span>Danger Zone</span>
+                      </CardTitle>
+                      <CardDescription className="text-gray-300">
+                        Once you delete your account, there is no going back. Please be certain.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {!showDeleteConfirm ? (
+                        <button
+                          onClick={() => setShowDeleteConfirm(true)}
+                          className="w-full glass px-6 py-3 rounded-lg text-red-400 hover:bg-red-500/20 transition-all duration-300 border border-red-500/30 hover:border-red-500/50 flex items-center justify-center space-x-2 group"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                          <span className="font-medium">Delete Account</span>
+                        </button>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
+                            <p className="text-white font-medium mb-2">⚠️ This will permanently delete:</p>
+                            <ul className="text-gray-300 text-sm space-y-1 ml-4 list-disc">
+                              <li>Your account and profile information</li>
+                              <li>All your numerology readings</li>
+                              <li>All your love compatibility matches</li>
+                              <li>All your trust assessments</li>
+                              <li>Your subscription data</li>
+                            </ul>
+                          </div>
+                          <div className="flex space-x-3">
+                            <button
+                              onClick={() => setShowDeleteConfirm(false)}
+                              disabled={isDeleting}
+                              className="flex-1 glass px-6 py-3 rounded-lg text-white hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleDeleteAccount}
+                              disabled={isDeleting}
+                              className="flex-1 px-6 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-all duration-300 border border-red-600 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isDeleting ? (
+                                <>
+                                  <div className="spinner w-4 h-4"></div>
+                                  <span>Deleting...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Trash2 className="w-4 h-4" />
+                                  <span>Yes, Delete Forever</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </motion.div>
               </div>
             </motion.div>
