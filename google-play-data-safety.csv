@@ -4,7 +4,7 @@ PSL_DATA_COLLECTION_ENCRYPTED_IN_TRANSIT,,true,MAYBE_REQUIRED,Is all of the user
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_PASSWORD,true,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / Username and password
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_USER_ID_PASSWORD_OTHER_AUTH,true,MULTIPLE_CHOICE,"Which of the following methods of account creation does your app support? Select all that apply / Username, password, and other authentication"
 PSL_SUPPORTED_ACCOUNT_CREATION_METHODS,PSL_ACM_OAUTH,true,MULTIPLE_CHOICE,Which of the following methods of account creation does your app support? Select all that apply / OAuth
-PSL_ACCOUNT_DELETION_URL,,,MAYBE_REQUIRED,Add a link that users can use to request that their account and associated data is deleted
+PSL_ACCOUNT_DELETION_URL,,https://lovelock.it.com/account,MAYBE_REQUIRED,Add a link that users can use to request that their account and associated data is deleted
 PSL_SUPPORT_DATA_DELETION_BY_USER,DATA_DELETION_YES,true,SINGLE_CHOICE,Do you provide a way for users to request that their data is deleted? / Yes
 PSL_DATA_DELETION_URL,,https://lovelock.it.com/account,MAYBE_REQUIRED,Delete data URL
 PSL_DATA_TYPES_PERSONAL,PSL_NAME,true,MULTIPLE_CHOICE,Personal info / Name
