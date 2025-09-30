@@ -1,8 +1,8 @@
 'use client'
 
-import { useUser, UserProfile, UserButton } from '@clerk/nextjs'
+import { useUser, UserProfile, UserButton, useClerk } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
-import { User, Settings, Shield, Bell, CreditCard, Key } from 'lucide-react'
+import { User, Settings, Shield, Bell, CreditCard, Key, LogOut } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useEffect, useState, Suspense, useRef } from 'react'
@@ -10,6 +10,7 @@ import { SubscriptionManagement } from '@/components/subscription-management'
 
 function AccountPageContent() {
   const { user, isLoaded } = useUser()
+  const { signOut } = useClerk()
   const searchParams = useSearchParams()
   const router = useRouter()
   const [mobileAuth, setMobileAuth] = useState(false)
@@ -218,6 +219,22 @@ function AccountPageContent() {
                     }
                   }}
                 />
+
+                {/* Log Out Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="mt-8"
+                >
+                  <button
+                    onClick={() => signOut(() => router.push('/'))}
+                    className="w-full glass px-6 py-3 rounded-lg text-white hover:bg-red-500/20 transition-all duration-300 border border-white/10 hover:border-red-500/50 flex items-center justify-center space-x-2 group"
+                  >
+                    <LogOut className="w-5 h-5 group-hover:text-red-400 transition-colors" />
+                    <span className="font-medium">Log Out</span>
+                  </button>
+                </motion.div>
               </div>
             </motion.div>
           )}

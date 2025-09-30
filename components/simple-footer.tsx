@@ -1,6 +1,6 @@
 'use client'
 
-import { Heart, Mail, Github, Instagram } from 'lucide-react'
+import { Heart, Mail, Instagram } from 'lucide-react'
 
 // Reddit icon component (since lucide-react doesn't have a built-in Reddit icon)
 function RedditIcon({ className }: { className?: string }) {
@@ -70,15 +70,6 @@ export function SimpleFooter() {
                 aria-label="Follow us on Instagram"
               >
                 <Instagram className="w-5 h-5 text-white" />
-              </a>
-              <a
-                href="https://github.com/lovelock-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-800 hover:bg-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                aria-label="View our code on GitHub"
-              >
-                <Github className="w-5 h-5 text-white" />
               </a>
               <a
                 href="https://www.reddit.com/r/Lovelock/"
